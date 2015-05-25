@@ -1,0 +1,11 @@
+--- drivers/mmc/card/block.c
++++ drivers/mmc/card/block.c
+@@ -3212,7 +3212,7 @@
+ 		mmc_claim_host(card->host);
+ 		mmc_stop_bkops(card);
+ 		mmc_release_host(card->host);
+-		mmc_send_long_pon(card);
++		mmc_send_pon(card);
+ 		mmc_rpm_release(card->host, &card->dev);
+ 	}
+ 	return;

@@ -1,0 +1,12 @@
+--- drivers/net/usb/rmnet_usb_data.c
++++ drivers/net/usb/rmnet_usb_data.c
+@@ -550,8 +550,7 @@
+ 		break;
+ 
+ 	default:
+-		dev_err(&unet->intf->dev, "[%s] error: "
+-			"rmnet_ioct called for unsupported cmd[%d]",
++		dev_dbg(&unet->intf->dev, "[%s] error: rmnet_ioctl called for unsupported cmd[0x%x]\n",
+ 			dev->name, cmd);
+ 		return -EINVAL;
+ 	}

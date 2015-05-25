@@ -1,0 +1,11 @@
+--- include/linux/rtnetlink.h
++++ include/linux/rtnetlink.h
+@@ -283,6 +283,8 @@
+ 	RTA_MP_ALGO, /* no longer used */
+ 	RTA_TABLE,
+ 	RTA_MARK,
++	RTA_MFC_STATS, /* not used - backported from the future */
++	RTA_UID,
+ 	__RTA_MAX
+ };
+ 

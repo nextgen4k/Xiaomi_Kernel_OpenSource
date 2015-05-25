@@ -1,0 +1,10 @@
+--- include/linux/Kbuild
++++ include/linux/Kbuild
+@@ -356,6 +356,7 @@
+ header-y += signalfd.h
+ header-y += snmp.h
+ header-y += socket.h
++header-y += sockev.h
+ header-y += sockios.h
+ header-y += som.h
+ header-y += sonet.h

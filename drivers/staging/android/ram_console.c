@@ -65,6 +65,7 @@ static int __devinit ram_console_probe(struct platform_device *pdev)
 		if (bootinfo)
 			bootinfo_size = strlen(bootinfo);
 	}
+
 	ram_console_zone = prz;
 	ram_console.data = prz;
 
@@ -150,6 +151,7 @@ static int __init ram_console_late_init(void)
 {
 	struct proc_dir_entry *entry;
 	struct persistent_ram_zone *prz = ram_console_zone;
+
 	if (!prz)
 		return 0;
 

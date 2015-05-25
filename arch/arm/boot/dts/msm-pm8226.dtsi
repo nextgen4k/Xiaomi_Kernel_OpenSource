@@ -9,6 +9,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  */
+
 &spmi_bus {
 	#address-cells = <1>;
 	#size-cells = <0>;
@@ -39,7 +40,6 @@
 			qcom,pon-dbc-delay = <15625>;
 			qcom,system-reset;
 			qcom,s3-debounce = <32>;
-			qcom,s3-src = "kpdpwr-and-resin";
 
 			qcom,pon_1 {
 				qcom,pon-type = <0>;
@@ -98,11 +98,12 @@
 			qcom,cool-bat-decidegc = <10>;
 			qcom,cool-bat-mv = <4100>;
 			qcom,ibatmax-cool-ma = <350>;
+			qcom,chg-iadc = <&pm8226_iadc>;
+			qcom,ibat-calibration-enabled;
 			qcom,batt-hot-percentage = <25>;
 	                qcom,batt-cold-percentage = <80>;
 
-
-			qcom,chgr@1000 {
+			pm8226_chg_chgr: qcom,chgr@1000 {
 				status = "disabled";
 				reg = <0x1000 0x100>;
 				interrupts =	<0x0 0x10 0x0>,
@@ -221,6 +222,10 @@
 			qcom,bms-vadc = <&pm8226_vadc>;
 			qcom,bms-iadc = <&pm8226_iadc>;
 			qcom,bms-adc_tm = <&pm8226_adc_tm>;
+
+			qcom,batt-pres-status@1208 {
+				reg = <0x1208 0x1>;
+			};
 
 			qcom,bms-iadc@3800 {
 				reg = <0x3800 0x100>;
@@ -363,11 +368,11 @@
 			mpp@a700 {
 				reg = <0xa700 0x100>;
 				qcom,pin-num = <8>;
-                                qcom,mode = <2>;
-                                qcom,vin-sel = <1>;
-                                qcom,pull = <1>;
-                                qcom,invert = <0>;
-                                qcom,master-en = <1>;
+				qcom,mode = <2>;
+				qcom,vin-sel = <1>;
+				qcom,pull = <1>;
+				qcom,invert = <0>;
+				qcom,master-en = <1>;
 			};
 		};
 
@@ -380,6 +385,8 @@
 			interrupt-names = "eoc-int-en-set";
 			qcom,adc-bit-resolution = <15>;
 			qcom,adc-vdd-reference = <1800>;
+			qcom,vadc-poll-eoc;
+			qcom,pmic-revid = <&pm8226_revid>;
 
 			chan@8 {
 				label = "die_temp";
@@ -438,26 +445,20 @@
 			qcom,adc-bit-resolution = <16>;
 			qcom,adc-vdd-reference = <1800>;
 			qcom,iadc-vadc = <&pm8226_vadc>;
+			qcom,iadc-poll-eoc;
 			qcom,use-default-rds-trim = <0>;
+			qcom,pmic-revid = <&pm8226_revid>;
 
 			chan@0 {
 				label = "internal_rsense";
 				reg = <0>;
 				qcom,decimation = <0>;
-				qcom,pre-div-channel-scaling = <1>;
-				qcom,calibration-type = "absolute";
-				qcom,scale-function = <0>;
-				qcom,hw-settle-time = <0>;
 				qcom,fast-avg-setup = <0>;
 			};
 			chan@1 {
 				label = "external_rsense";
 				reg = <1>;
 				qcom,decimation = <0>;
-				qcom,pre-div-channel-scaling = <1>;
-				qcom,calibration-type = "absolute";
-				qcom,scale-function = <0>;
-				qcom,hw-settle-time = <0>;
 				qcom,fast-avg-setup = <0>;
 			};
 		};
@@ -861,6 +862,7 @@
 			reg = <0xd300 0x100>;
 			label = "flash";
 			flash-boost-supply = <&pm8226_chg_boost>;
+			flash-wa-supply = <&pm8226_chg_chgr>;
 			pm8226_flash0: qcom,flash_0 {
 				qcom,max-current = <1000>;
 				qcom,default-state = "off";
@@ -874,22 +876,6 @@
 						"flash0_trigger";
 				qcom,id = <1>;
 				linux,name = "led:flash_0";
-				qcom,current = <625>;
-			};
-
-			pm8226_flash1: qcom,flash_1 {
-				qcom,max-current = <1000>;
-				qcom,default-state = "off";
-				qcom,headroom = <3>;
-				qcom,duration = <1280>;
-				qcom,clamp-curr = <200>;
-				qcom,startup-dly = <3>;
-				qcom,safety-timer;
-				linux,default-trigger =
-						"flash1_trigger";
-				label = "flash";
-				qcom,id = <2>;
-				linux,name = "led:flash_1";
 				qcom,current = <625>;
 			};
 
